@@ -1,0 +1,26 @@
+version: '3'
+services:
+  mysql:
+    image: mysql:5.2.77
+    hostname: mysql
+    deploy:
+      placement:
+        constraints: [node.role == manager]
+    environment:
+      MYSQL_ROOT_PASSWORD: 4linux
+    ports:
+      - 3306:3306
+    volumes:
+      - /opt/banco:/var/lib/mysql
+  wordpress:
+    image: wordpress
+    hostname: wordpress
+    deploy:
+      mode: replicated
+      replicas: 1
+      placement:
+        constraints: [node.role == worker]
+    ports:
+      - 80:80
+    volumes:
+      - /opt/html:/var/www/html
