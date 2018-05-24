@@ -1,7 +1,7 @@
 version: '3'
 services:
   mysql:
-    image: mysql:5.2.77
+    image: mysql:5.7.22
     hostname: mysql
     deploy:
       placement:
@@ -11,7 +11,7 @@ services:
     ports:
       - 0.0.0.0:3306:3306
     volumes:
-      - $PWD/banco:/var/lib/mysql
+      - /opt/banco:/var/lib/mysql
   wordpress:
     image: wordpress
     hostname: wordpress
@@ -22,7 +22,9 @@ services:
         constraints: [node.role == worker]
     environment:
       WORDPRESS_DB_PASSWORD: 4linux
+    links:
+      - mysql:mysql
     ports:
-      - 80:80
+      - 0.0.0.0:80:80
     volumes:
       - /opt/html:/var/www/html
